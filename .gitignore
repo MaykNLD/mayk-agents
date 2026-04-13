@@ -1,0 +1,28 @@
+# Entorno
+.env
+.env.local
+.env.*.local
+
+# Archivos privados de cliente (nunca en el repo de agentes)
+cliente-privado/
+privado/
+secrets/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Temporales
+tmp/
+temp/
