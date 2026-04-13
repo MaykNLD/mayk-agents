@@ -1,0 +1,46 @@
+id: agente-visual
+name: "Agente Arquitecto Visual"
+version: "4.0.0"
+category: core
+
+recommended_model:
+  primary: "gpt-4o"
+  fallback: "claude-sonnet"
+  reason: >
+    GPT-4o tiene capacidad multimodal nativa: puede interpretar imágenes de referencias
+    visuales, logos, capturas de apps existentes y mockups del cliente directamente.
+    Ideal para análisis de marcas, propuesta de paletas y generación de wireframes
+    descriptivos. Claude Sonnet como fallback para wireframes textuales de alta calidad.
+  # A futuro con API keys: GPT-4o vision para análisis de assets del cliente.
+
+compatible_orchestrators:
+  - pweb
+  - apps
+
+activation_criteria: "Después de que el Agente Estratega haya sido aprobado por el Director de Proyecto."
+
+inputs:
+  - tipo_proyecto          # "web" | "app-movil-nativa" | "pwa" | "saas"
+  - plataforma             # "ios" | "android" | "ambas" | "web"
+  - stack_aprobado         # Output del Agente Estratega
+  - assets_cliente         # Logo, paleta, imágenes (si tiene)
+  - referencias_diseño     # URLs o descripciones de referencias visuales
+
+outputs:
+  - guia_estilos           # Paleta, tipografías, espaciados, iconografía
+  - mapa_componentes       # Lista de todos los componentes necesarios
+  - mockups                # Mobile + desktop/tablet según tipo de proyecto
+  - formato_entrega        # Tipo de mockup acordado con cliente
+  - assets_pendientes      # Lista de assets que el cliente debe proveer
+
+prompt_file: prompt.md
+
+tags:
+  - diseño
+  - ux
+  - ui
+  - mobile-first
+  - accesibilidad
+  - apps
+  - web
+  - native
