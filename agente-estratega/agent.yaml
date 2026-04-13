@@ -1,0 +1,46 @@
+id: agente-estratega
+name: "Agente Estratega de Negocio"
+version: "4.0.0"
+category: core
+
+recommended_model:
+  primary: "claude-opus"
+  fallback: "claude-sonnet"
+  reason: >
+    Razonamiento de negocio complejo: análisis de requisitos, decisión de stacks,
+    elaboración de propuestas económicas con datos reales. Claude destaca en
+    pensamiento estructurado, toma de decisiones con contexto amplio y honestidad
+    en estimaciones. Claude Sonnet como alternativa equilibrada coste/calidad.
+  # A futuro con API keys: invocado automáticamente por el orquestador en Fase 1.
+
+compatible_orchestrators:
+  - pweb
+  - apps
+
+activation_criteria: "Siempre. Primer agente en proyectos desde cero. Segundo tras Auditor en reconstrucciones."
+
+inputs:
+  - brief_cliente           # Respuestas del formulario de brief
+  - informe_auditor         # Output del Agente Auditor (si aplica)
+  - tipo_proyecto           # "web" | "app-movil" | "saas" | "desktop" | "pwa"
+  - plataformas_objetivo    # "ios" | "android" | "ambas" | "web" (solo en apps)
+  - presupuesto_disponible  # Número o "estimar"
+
+outputs:
+  - requisitos_funcionales  # Documento completo de requisitos
+  - stack_propuesto         # Con justificación
+  - diagrama_entidades      # Modelo de datos básico
+  - roles_usuario           # Definidos y justificados
+  - integraciones           # Necesarias vs. opcionales
+  - propuesta_economica     # Desglosada por fase
+
+prompt_file: prompt.md
+
+tags:
+  - estrategia
+  - negocio
+  - arquitectura
+  - stack
+  - presupuesto
+  - apps
+  - web
