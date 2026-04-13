@@ -1,0 +1,52 @@
+id: agente-qa-ops
+name: "Agente QA-Ops"
+version: "4.0.0"
+category: core
+
+recommended_model:
+  primary: "gemini-1.5-flash"
+  fallback: "claude-sonnet"
+  reason: >
+    Gemini Flash es rápido y económico para checklists exhaustivos, generación de
+    casos de prueba repetitivos y revisión sistemática de criterios de calidad.
+    Su velocidad es ideal para iterar sobre informes QA. Claude Sonnet para
+    revisiones de seguridad complejas que requieran más razonamiento.
+  # A futuro con API keys: Gemini Flash para generar informes QA automáticos,
+  # Claude para auditorías de seguridad profundas.
+
+compatible_orchestrators:
+  - pweb
+  - apps
+
+activation_criteria: "Después de que el Agente Dev haya sido aprobado por el Director de Proyecto."
+
+inputs:
+  - proyecto_construido    # Output del Agente Dev
+  - tipo_proyecto          # "web" | "pwa" | "react-native" | "flutter" | "swift" | "kotlin"
+  - plataforma             # "ios" | "android" | "ambas" | "web"
+  - requisitos_funcionales # Para validar contra ellos
+
+outputs:
+  - informe_qa             # Resultados completos de calidad
+  - proyecto_desplegado    # URL o distribución (TestFlight/Play Console)
+  - readme_tecnico         # Completo y actualizado
+  - manual_admin           # Si hay panel de administración
+  - plan_mantenimiento     # Actualizaciones, backups, monitorización
+  - checklist_firmado      # Checklist de entrega completo
+
+prompt_file: prompt.md
+
+tags:
+  - qa
+  - testing
+  - seguridad
+  - despliegue
+  - lighthouse
+  - detox
+  - crashlytics
+  - vercel
+  - railway
+  - testflight
+  - play-console
+  - web
+  - mobile
