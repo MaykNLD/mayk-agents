@@ -1,0 +1,51 @@
+id: agente-dev
+name: "Agente Ingeniería Dev"
+version: "4.0.0"
+category: core
+
+recommended_model:
+  primary: "claude-sonnet"
+  fallback: "claude-opus"
+  reason: >
+    Claude Sonnet ofrece la mejor relación calidad/velocidad/coste para generación
+    de código. Adherencia superior a principios SOLID, Clean Code y arquitecturas
+    complejas. Menos alucinaciones en código de producción que otros modelos.
+    Claude Opus para proyectos de máxima complejidad (SaaS enterprise, apps nativas).
+  # A futuro con API keys: Claude Sonnet/Opus invocado por el orquestador para
+  # generación de código por módulos, con context resumido entre sesiones largas.
+
+compatible_orchestrators:
+  - pweb
+  - apps
+
+activation_criteria: "Después de que el Agente Visual haya sido aprobado y el cliente haya dado el visto bueno al diseño."
+
+inputs:
+  - stack_aprobado         # Output Fase 1 (Estratega)
+  - tipo_proyecto          # "web" | "pwa" | "react-native" | "flutter" | "swift" | "kotlin" | "saas"
+  - mockups_aprobados      # Output Fase 2 (Visual)
+  - requisitos_funcionales # Output Fase 1 (Estratega)
+  - codigo_existente       # Si hay código previo (del Auditor)
+
+outputs:
+  - codigo_fuente          # Proyecto completo con estructura definida
+  - tests_pasando          # Unitarios + integración + E2E críticos
+  - readme_tecnico         # Instrucciones de instalación y ejecución
+  - env_example            # Todas las variables sin valores reales
+  - documentacion_modulos  # README por módulo complejo
+
+prompt_file: prompt.md
+
+tags:
+  - desarrollo
+  - fullstack
+  - react
+  - nextjs
+  - react-native
+  - flutter
+  - swift
+  - kotlin
+  - node
+  - mobile
+  - web
+  - testing
