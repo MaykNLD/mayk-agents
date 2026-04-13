@@ -1,0 +1,43 @@
+id: agente-auditor
+name: "Agente Auditor Forense"
+version: "4.0.0"
+category: core
+
+recommended_model:
+  primary: "gemini-1.5-pro"
+  fallback: "claude-sonnet"
+  reason: >
+    Contexto largo ideal para analizar bases de código completas.
+    Búsqueda web integrada para verificar Lighthouse, SEO técnico y versiones
+    de dependencias en tiempo real. Gemini Flash como opción rápida y económica
+    para proyectos pequeños.
+  # A futuro con API keys: este agente se invocará automáticamente por el orquestador.
+  # Sin keys: el orquestador indica al usuario qué modelo abrir manualmente.
+
+compatible_orchestrators:
+  - pweb
+  - apps
+
+activation_criteria: "Solo cuando el cliente tiene web, app o código previo. En proyectos desde cero: omitir."
+
+inputs:
+  - url_actual           # URL de web/app existente (opcional)
+  - codigo_fuente        # Repo o carpeta de código (opcional)
+  - urls_competidores    # Para análisis comparativo (opcional)
+  - tipo_proyecto        # "web" | "app-movil" | "saas" | "desktop"
+
+outputs:
+  - informe_rescate      # Qué se rescata, refactoriza o reconstruye
+  - inventario_activos   # Assets con estado: rescatable / refactorizar / descartar
+  - metricas_calidad     # Lighthouse (web) o métricas móviles (app)
+  - lista_riesgos        # Técnicos, legales, de seguridad
+
+prompt_file: prompt.md
+
+tags:
+  - auditoria
+  - forense
+  - seo
+  - accesibilidad
+  - mobile
+  - seguridad
