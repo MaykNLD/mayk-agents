@@ -1,0 +1,44 @@
+version: "4.0.0"
+description: "Registro maestro de todos los agentes globales del ecosistema mayk.dev"
+updated: "2026-04-13"
+
+agents:
+  - id: agente-auditor
+    name: "Agente Auditor Forense"
+    path: agente-auditor/agent.yaml
+    category: core
+    compatible_orchestrators:
+      - pweb
+      - apps
+
+  - id: agente-estratega
+    name: "Agente Estratega de Negocio"
+    path: agente-estratega/agent.yaml
+    category: core
+    compatible_orchestrators:
+      - pweb
+      - apps
+
+  - id: agente-visual
+    name: "Agente Arquitecto Visual"
+    path: agente-visual/agent.yaml
+    category: core
+    compatible_orchestrators:
+      - pweb
+      - apps
+
+  - id: agente-dev
+    name: "Agente Ingeniería Dev"
+    path: agente-dev/agent.yaml
+    category: core
+    compatible_orchestrators:
+      - pweb
+      - apps
+
+  - id: agente-qa-ops
+    name: "Agente QA-Ops"
+    path: agente-qa-ops/agent.yaml
+    category: core
+    compatible_orchestrators:
+      - pweb
+      - apps
