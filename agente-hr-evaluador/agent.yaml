@@ -1,0 +1,48 @@
+id: agente-hr-evaluador
+name: "Agente HR Evaluador de Ofertas"
+version: "1.0.0"
+category: career
+
+recommended_model:
+  primary: "google/gemini-2.5-pro"
+  fallback: "anthropic/claude-3-5-sonnet"
+  reason: >
+    Contexto masivo para analizar Job Descriptions largas junto al perfil base
+    completo del candidato. Necesita razonamiento estructurado para producir los
+    7 bloques A-G (resumen, match CV, nivel, comp, personalización, entrevistas,
+    legitimidad del posting). Gemini 2.5 Pro aporta ventana de contexto enorme y
+    búsqueda web integrada para verificar salarios en tiempo real.
+
+compatible_orchestrators:
+  - career
+
+activation_criteria: >
+  Activado por bridge.py cuando una aplicación tiene status="pendiente".
+  También invocable directamente desde el CLI (mayk-cli.py opción 3).
+
+inputs:
+  - url_oferta       # URL pública de la JD (Greenhouse, Ashby, Lever, custom...)
+  - texto_oferta     # Alternativa: texto completo pegado directamente
+  - perfil_base_json # Master CV estructurado del candidato (desde Supabase)
+  - idioma           # "ES" | "EN"  (default: ES)
+
+outputs:
+  - fit_score        # float 0.0-5.0
+  - grado            # "A" | "B" | "C" | "D" | "F"
+  - bloque_a         # Resumen del Rol (tabla estructurada)
+  - bloque_b         # Match con Perfil + gaps + mitigaciones
+  - bloque_c         # Nivel y Estrategia de posicionamiento
+  - bloque_d         # Compensación y Demanda de mercado
+  - bloque_e         # Plan de Personalización del CV (top 5 cambios)
+  - bloque_f         # Plan de Entrevistas STAR+R (6-10 historias)
+  - bloque_g         # Posting Legitimacy (High Confidence / Caution / Suspicious)
+  - keywords_clave   # array: keywords ATS extraídas del JD
+  - recomendacion    # "Aplicar" | "Aplicar con reservas" | "Descartar"
+
+prompt_file: prompt.md
+tags:
+  - career
+  - rrhh
+  - scoring
+  - ats
+  - evaluacion
