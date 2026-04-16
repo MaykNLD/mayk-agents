@@ -3,9 +3,9 @@ WORKDIR /app
 # WeasyPrint necesita dependencias del sistema para renderizar PDF
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpango-1.0-0 \
-    libpangocairo-1.0-0 \
-    libcairo2 \
-    libgdk-pixbuf2.0-0 \
+    libpangoft2-1.0-0 \
+    libjpeg-dev \
+    libopenjp2-7-dev \
     libffi-dev \
     shared-mime-info \
     && rm -rf /var/lib/apt/lists/*
