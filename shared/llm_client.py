@@ -17,7 +17,10 @@ MODEL_MAP = {
     "agente-estratega": "anthropic/claude-3-haiku",      # Razonamiento, bajo coste
     "agente-visual":    "openai/gpt-4o-mini",            # Creativo, económico
     "agente-dev":       "anthropic/claude-3-5-sonnet",   # Código complejo: más potente
-    "agente-qa-ops":    "google/gemini-flash-1.5",      # Análisis rápido
+    "agente-qa-ops":    "google/gemini-flash-1.5",      # Analisis rapido
+    # Career agents
+    "agente-hr-evaluador": "google/gemini-2.5-pro",
+    "agente-hr-sastre":    "anthropic/claude-3-5-haiku",      # Análisis rápido
 }
 
 
