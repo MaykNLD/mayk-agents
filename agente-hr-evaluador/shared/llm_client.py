@@ -21,17 +21,26 @@ MODEL_MAP = {
     # Career agents (Modelos de pago desactivados temporalmente por falta de saldo)
     # "agente-hr-evaluador": "google/gemini-2.5-pro",      # Evaluacion profunda
     # "agente-hr-sastre":    "anthropic/claude-3-5-haiku", # Adaptacion rapida
-    # "agente-hr-evaluador": "meta-llama/llama-3.3-70b-instruct:free",  # Rate-limited por Venice
+    # "agente-hr-rrhh":      "google/gemini-2.5-pro",      # Analisis CV (profundo)
+    # "agente-hr-diseno":    "anthropic/claude-3-5-haiku", # Generacion HTML CV
+    # "agente-scanner":      "google/gemini-flash-1.5",    # Scanner portales
+    # "agente-hr-evaluador": "meta-llama/llama-3.3-70b-instruct:free",  # Rate-limited Venice
     # "agente-hr-sastre":    "meta-llama/llama-3.3-70b-instruct:free",
     "agente-hr-evaluador": "nousresearch/hermes-3-llama-3.1-405b:free",
     "agente-hr-sastre":    "nousresearch/hermes-3-llama-3.1-405b:free",
+    "agente-hr-rrhh":      "nousresearch/hermes-3-llama-3.1-405b:free",
+    "agente-hr-diseno":    "meta-llama/llama-3.3-70b-instruct:free",
+    "agente-scanner":      "meta-llama/llama-3.3-70b-instruct:free",
 }
 
 # Timeout por modelo (segundos) — hermes-405b es el mas grande, puede tardar hasta 200s
 TIMEOUT_MAP = {
     "agente-hr-evaluador": 240,
+    "agente-hr-rrhh":      240,
     "agente-dev":          120,
     "agente-hr-sastre":    200,
+    "agente-hr-diseno":    180,
+    "agente-scanner":      120,
 }
 DEFAULT_TIMEOUT = 90
 
