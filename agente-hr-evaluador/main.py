@@ -51,7 +51,7 @@ def execute(req: EvaluadorRequest):
     partes.append("Responde UNICAMENTE en JSON valido con la estructura definida en tu prompt.")
 
     user_msg = "\n\n".join(partes)
-    raw = call_llm("agente-hr-evaluador", user_msg, max_tokens=4096)
+    raw = call_llm("agente-hr-evaluador", user_msg, max_tokens=2500)
 
     # Parsear JSON de la respuesta
     try:
