@@ -42,3 +42,17 @@ agents:
     compatible_orchestrators:
       - pweb
       - apps
+
+  - id: agente-hr-evaluador
+    name: "Agente HR Evaluador de Ofertas"
+    path: agente-hr-evaluador/agent.yaml
+    category: career
+    compatible_orchestrators:
+      - career
+
+  - id: agente-hr-sastre
+    name: "Agente HR Sastre de CV"
+    path: agente-hr-sastre/agent.yaml
+    category: career
+    compatible_orchestrators:
+      - career
