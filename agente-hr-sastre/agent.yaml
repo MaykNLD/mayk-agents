@@ -1,0 +1,41 @@
+id: agente-hr-sastre
+name: "Agente HR Sastre de CV"
+version: "1.0.0"
+category: career
+
+recommended_model:
+  primary: "anthropic/claude-3-5-haiku"
+  fallback: "anthropic/claude-3-haiku"
+  reason: >
+    Redaccion precisa con alta adherencia a instrucciones de formato ATS.
+    Claude minimiza alucinaciones en texto profesional.
+    claude-3-5-haiku: eficiente en coste, ideal para reescritura estructurada.
+
+compatible_orchestrators:
+  - career
+
+activation_criteria: >
+  Activado por bridge.py cuando fit_score >= 3.0 (grado C o superior).
+  No se activa para grado D o F.
+
+inputs:
+  - perfil_base_json          # Master CV completo del candidato (desde Supabase)
+  - analisis_evaluador_json   # Output completo del agente-hr-evaluador
+  - idioma                    # "ES" | "EN" (default: ES)
+  - mercado_geografico        # "ES" | "EU" | "LATAM" | "US"
+
+outputs:
+  - cv_adaptado_json          # CV reescrito y adaptado en JSON estructurado
+  - cambios_aplicados         # Lista de transformaciones realizadas
+  - keywords_insertadas       # Keywords ATS confirmadas como insertadas
+  - resumen_narrativo         # Parrafo de presentacion adaptado a la oferta
+  - consejo_carta             # 3 puntos clave para la carta de presentacion
+
+prompt_file: prompt.md
+tags:
+  - career
+  - rrhh
+  - cv
+  - ats
+  - redaccion
+  - adaptacion
