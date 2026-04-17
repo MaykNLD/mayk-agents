@@ -18,17 +18,14 @@ MODEL_MAP = {
     "agente-visual":    "openai/gpt-4o-mini",            # Creativo, economico
     "agente-dev":       "anthropic/claude-3-5-sonnet",   # Codigo complejo: mas potente
     "agente-qa-ops":    "google/gemini-flash-1.5",       # Analisis rapido
-    # Career agents (Modelos de pago desactivados temporalmente por falta de saldo)
-    # "agente-hr-evaluador": "google/gemini-2.5-pro",      # Evaluacion profunda
-    # "agente-hr-sastre":    "anthropic/claude-3-5-haiku", # Adaptacion rapida
-    # "agente-hr-rrhh":      "google/gemini-2.5-pro",      # Analisis CV (profundo)
-    # "agente-hr-diseno":    "anthropic/claude-3-5-haiku", # Generacion HTML CV
-    # "agente-scanner":      "google/gemini-flash-1.5",    # Scanner portales
-    # "agente-hr-evaluador": "meta-llama/llama-3.3-70b-instruct:free",  # Rate-limited Venice
-    # "agente-hr-sastre":    "meta-llama/llama-3.3-70b-instruct:free",
-    "agente-hr-evaluador": "nousresearch/hermes-3-llama-3.1-405b:free",
-    "agente-hr-sastre":    "nousresearch/hermes-3-llama-3.1-405b:free",
-    "agente-hr-rrhh":      "nousresearch/hermes-3-llama-3.1-405b:free",
+    # Modelos de pago desactivados temporalmente por falta de saldo
+    # "agente-hr-evaluador": "google/gemini-2.5-pro",
+    # "agente-hr-sastre":    "anthropic/claude-3-5-haiku",
+    # "agente-hr-rrhh":      "google/gemini-2.5-pro",
+
+    "agente-hr-rrhh":      "meta-llama/llama-3.3-70b-instruct:free",
+    "agente-hr-evaluador": "meta-llama/llama-3.3-70b-instruct:free",
+    "agente-hr-sastre":    "meta-llama/llama-3.3-70b-instruct:free",
     "agente-hr-diseno":    "meta-llama/llama-3.3-70b-instruct:free",
     "agente-scanner":      "meta-llama/llama-3.3-70b-instruct:free",
 }
