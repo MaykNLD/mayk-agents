@@ -70,11 +70,12 @@ def execute(req: EvaluadorRequest):
             clean = match.group(0)
         data = json.loads(clean)
 
-        # Normalizar fit_score: algunos modelos devuelven match_score (0-100)
-        fit_score = float(data.get("fit_score") or data.get("match_score") or 0.0)
+        # Normalizar fit_score: algunos modelos devuelven match_score, score o puntuacion (0-100)
+        fit_score = float(data.get("fit_score") or data.get("match_score") or data.get("score") or data.get("puntuacion") or 0.0)
         if fit_score > 5.0:  # Viene en escala 0-100, convertir a 0-5
             fit_score = round(fit_score / 20.0, 2)
         data["fit_score"] = fit_score  # Normalizar en el dict para Supabase
+
 
         # Recalcular grado si no lo viene bien o no corresponde al score normalizado
         grado = data.get("grado", "")
