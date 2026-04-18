@@ -23,6 +23,8 @@ El arquetipo determina qué proof points priorizar y cómo enmarcar la narrativa
 
 ## BLOQUE A — Resumen del Rol
 Tabla con:
+- Empresa: (nombre de la empresa, "Desconocida" si no hay nombre)
+- Rol: (título exacto del puesto)
 - Arquetipo detectado y dominio (platform/agentic/LLMOps/ML/enterprise/web/mobile)
 - Función principale (build/consult/manage/deploy)
 - Seniority requerido
