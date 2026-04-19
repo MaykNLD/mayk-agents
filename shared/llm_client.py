@@ -11,6 +11,9 @@ from pathlib import Path
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OPENROUTER_URL     = "https://openrouter.ai/api/v1/chat/completions"
 
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+GEMINI_URL     = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+
 # Mapa de modelos por agente (equilibrio calidad/coste)
 MODEL_MAP = {
     "agente-auditor":   "google/gemini-flash-1.5",      # Contexto largo, barato
@@ -23,9 +26,9 @@ MODEL_MAP = {
     # "agente-hr-sastre":    "anthropic/claude-3-5-haiku",
     # "agente-hr-rrhh":      "google/gemini-2.5-pro",
 
-    "agente-hr-rrhh":      "meta-llama/llama-3.3-70b-instruct:free",
-    "agente-hr-evaluador": "meta-llama/llama-3.3-70b-instruct:free",
-    "agente-hr-sastre":    "meta-llama/llama-3.3-70b-instruct:free",
+    "agente-hr-rrhh":      "gemini-2.0-flash",
+    "agente-hr-evaluador": "gemini-2.0-flash",
+    "agente-hr-sastre":    "gemini-2.0-flash",
     "agente-hr-diseno":    "google/gemma-3-27b-it:free",
     "agente-scanner":      "meta-llama/llama-3.2-3b-instruct:free",
 }
@@ -67,8 +70,8 @@ def call_llm(agent_id: str, user_message: str, max_tokens: int = 2048) -> str:
     - Retry con backoff exponencial por modelo.
     - Timeout adaptado por modelo.
     """
-    if not OPENROUTER_API_KEY:
-        return "ERROR: OPENROUTER_API_KEY no configurada en el entorno."
+    if not OPENROUTER_API_KEY and not GEMINI_API_KEY:
+        return "ERROR: Ni OPENROUTER_API_KEY ni GEMINI_API_KEY configuradas en el entorno."
 
     system_prompt = load_prompt(agent_id)
     primary_model = MODEL_MAP.get(agent_id, "google/gemini-flash-1.5")
@@ -90,16 +93,30 @@ def call_llm(agent_id: str, user_message: str, max_tokens: int = 2048) -> str:
             "max_tokens":  max_tokens,
             "temperature": 0.3,
         }
-        headers = {
-            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-            "Content-Type":  "application/json",
-            "HTTP-Referer":  "https://github.com/MaykNLD/mayk-orchestrators",
-            "X-Title":       "mayk.dev Orchestrator",
-        }
+        if "gemini" in model.lower() and GEMINI_API_KEY:
+            # Enrutar a Native Google API
+            used_url = GEMINI_URL
+            used_headers = {
+                "Authorization": f"Bearer {GEMINI_API_KEY}",
+                "Content-Type":  "application/json"
+            }
+        else:
+            # Enrutar a OpenRouter
+            if not OPENROUTER_API_KEY:
+                print(f"[llm_client] Saltando {model} por falta de OPENROUTER_API_KEY")
+                continue
+            used_url = OPENROUTER_URL
+            used_headers = {
+                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                "Content-Type":  "application/json",
+                "HTTP-Referer":  "https://github.com/MaykNLD/mayk-orchestrators",
+                "X-Title":       "mayk.dev Orchestrator",
+            }
+
         req = urllib.request.Request(
-            OPENROUTER_URL,
+            used_url,
             data=json.dumps(payload).encode(),
-            headers=headers,
+            headers=used_headers,
             method="POST",
         )
         try:
