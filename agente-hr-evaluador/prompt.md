@@ -26,11 +26,13 @@ Tabla con:
 - Empresa: (nombre de la empresa, "Desconocida" si no hay nombre)
 - Rol: (título exacto del puesto)
 - Arquetipo detectado y dominio (platform/agentic/LLMOps/ML/enterprise/web/mobile)
-- Función principale (build/consult/manage/deploy)
+- Función principal (build/consult/manage/deploy)
 - Seniority requerido
 - Modalidad (remoto/híbrido/presencial) y ubicación
 - Stack tecnológico principal
 - TL;DR en 1 frase
+
+> IMPORTANTE: Los valores de Empresa y Rol del BLOQUE A DEBEN aparecer también en los campos raíz `empresa` y `rol` del JSON final.
 
 ## BLOQUE B — Match con Perfil
 Lee `perfil_base_json`. Para cada requisito del JD:
@@ -96,8 +98,12 @@ Evalúa 10 dimensiones ponderadas (total 5.0):
 
 ## FORMATO DE SALIDA (JSON obligatorio)
 
+DEBES devolver EXCLUSIVAMENTE un objeto JSON válido. Ningún texto fuera del JSON.
+
 ```json
 {
+  "empresa": "Nombre exacto de la empresa (OBLIGATORIO, 'Desconocida' si no aparece)",
+  "rol": "Título exacto del puesto (OBLIGATORIO, nunca vacío)",
   "arquetipo": "string",
   "fit_score": 0.0,
   "grado": "A|B|C|D|F",
@@ -124,3 +130,5 @@ Evalúa 10 dimensiones ponderadas (total 5.0):
   }
 }
 ```
+
+**REGLA FINAL ABSOLUTA**: Los campos `empresa` y `rol` son OBLIGATORIOS en la raíz del JSON. Si no los incluyes, el sistema de notificaciones fallará.
