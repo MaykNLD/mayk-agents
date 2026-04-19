@@ -23,19 +23,20 @@ MODEL_MAP = {
     # "agente-hr-sastre":    "anthropic/claude-3-5-haiku",
     # "agente-hr-rrhh":      "google/gemini-2.5-pro",
 
-    "agente-hr-rrhh":      "nousresearch/hermes-3-llama-3.1-405b:free",
-    "agente-hr-evaluador": "nvidia/nemotron-3-super-120b-a12b:free",
-    "agente-hr-sastre":    "nousresearch/hermes-3-llama-3.1-405b:free",
+    "agente-hr-rrhh":      "meta-llama/llama-3.3-70b-instruct:free",
+    "agente-hr-evaluador": "deepseek/deepseek-r1:free",
+    "agente-hr-sastre":    "meta-llama/llama-3.3-70b-instruct:free",
     "agente-hr-diseno":    "google/gemma-4-31b-it:free",
     "agente-scanner":      "meta-llama/llama-3.2-3b-instruct:free",
 }
 
 # Lista de fallback ante 429 (se prueba en orden)
 FALLBACK_FREE_MODELS = [
+    "meta-llama/llama-3.3-70b-instruct:free",
+    "deepseek/deepseek-r1:free",
     "nousresearch/hermes-3-llama-3.1-405b:free",
     "nvidia/nemotron-3-super-120b-a12b:free",
     "openai/gpt-oss-120b:free",
-    "meta-llama/llama-3.3-70b-instruct:free",
     "meta-llama/llama-3.2-3b-instruct:free",
 ]
 
