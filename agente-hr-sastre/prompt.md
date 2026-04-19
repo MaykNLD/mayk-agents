@@ -19,14 +19,14 @@ Lee estos dos inputs juntos:
   - `bloque_e`: plan de personalizacion (los 5 cambios recomendados)
   - `keywords_clave`: lista de terminos a insertar
 
-### Paso 2 — Seleccion de Proof Points
-Selecciona los 5-7 logros del perfil que mejor resuenen con la JD segun el arquetipo detectado:
-- **Backend/Full-Stack**: priorizar sistemas escalables, rendimiento, APIs criticas
-- **Frontend**: priorizar UX medible, performance, accesibilidad
-- **DevOps/Cloud**: priorizar uptime, reduccion de costes, automatizacion CI/CD
-- **AI/ML**: priorizar modelos en produccion, metricas de mejora, pipelines
-- **QA**: priorizar cobertura de pruebas, bugs prevenidos, automatizacion
-- **PM**: priorizar metricas de producto, adoption rate, revenue impact
+### Paso 2 — Selección de Proof Points
+Selecciona los 5-7 logros del perfil que mejor resuenen con la JD según el arquetipo de industria detectado:
+- **Tecnología e IT** (Backend, Cloud, Dev): priorizar sistemas, rendimiento, APIs, reducción de costes, uptime.
+- **Operaciones y Logística**: priorizar eficiencia en cadena de suministro, reducción de tiempos, optimización de recursos.
+- **Servicios y Hostelería**: priorizar satisfacción del cliente, volumen gestionado, eficiencia en turnos, resolución de problemas.
+- **Ventas y Marketing**: priorizar métricas de conversión, ingresos generados, retención de clientes, alcance de campañas.
+- **Finanzas y Legal**: priorizar precisión, ahorro de costes, cumplimiento normativo, auditorías exitosas.
+- **Otro Profesional/General**: priorizar métricas de impacto, capacidad de liderazgo, cumplimiento de objetivos y adaptabilidad.
 
 ### Paso 3 — Extractor de Metricas
 Para cada proof point, intenta cuantificar el impacto:
