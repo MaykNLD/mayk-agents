@@ -26,3 +26,6 @@ logs/
 # Temporales
 tmp/
 temp/
+
+# Carpetas shared inyectadas por CI
+agente-*/shared/
