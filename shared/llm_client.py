@@ -56,11 +56,19 @@ DEFAULT_TIMEOUT = 90
 
 
 def load_prompt(agent_id: str) -> str:
-    """Carga el prompt.md del agente desde su directorio."""
-    base = Path(__file__).parent.parent / agent_id / "prompt.md"
-    if base.exists():
-        return base.read_text(encoding="utf-8")
-    return f"Eres el {agent_id} del ecosistema mayk.dev. Ejecuta tu rol con precision."
+    """Carga el prompt.md del agente desde su directorio (Local o en Docker)."""
+    # 1. Rutas Docker (/app/prompt.md)
+    base_docker = Path(__file__).parent.parent / "prompt.md"
+    if base_docker.exists():
+        return base_docker.read_text(encoding="utf-8")
+        
+    # 2. Rutas Desarrollo Local (mayk-agents/agente_id/prompt.md)
+    base_local = Path(__file__).parent.parent / agent_id / "prompt.md"
+    if base_local.exists():
+        return base_local.read_text(encoding="utf-8")
+        
+    print(f"[ERROR CRITICO] No se encontro prompt.md para {agent_id}. El agente operará ciego.")
+    return f"Eres el {agent_id} del ecosistema mayk.dev. Ejecuta tu rol con precision pero responde SIEMPRE en JSON."
 
 
 def call_llm(agent_id: str, user_message: str, max_tokens: int = 2048) -> str:
