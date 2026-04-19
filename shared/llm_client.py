@@ -24,19 +24,19 @@ MODEL_MAP = {
     # "agente-hr-rrhh":      "google/gemini-2.5-pro",
 
     "agente-hr-rrhh":      "meta-llama/llama-3.3-70b-instruct:free",
-    "agente-hr-evaluador": "deepseek/deepseek-r1:free",
+    "agente-hr-evaluador": "meta-llama/llama-3.3-70b-instruct:free",
     "agente-hr-sastre":    "meta-llama/llama-3.3-70b-instruct:free",
-    "agente-hr-diseno":    "google/gemma-4-31b-it:free",
+    "agente-hr-diseno":    "google/gemma-3-27b-it:free",
     "agente-scanner":      "meta-llama/llama-3.2-3b-instruct:free",
 }
 
 # Lista de fallback ante 429 (se prueba en orden)
 FALLBACK_FREE_MODELS = [
     "meta-llama/llama-3.3-70b-instruct:free",
-    "deepseek/deepseek-r1:free",
+    "google/gemma-3-27b-it:free",
     "nousresearch/hermes-3-llama-3.1-405b:free",
+    "minimax/minimax-m2.5:free",
     "nvidia/nemotron-3-super-120b-a12b:free",
-    "openai/gpt-oss-120b:free",
     "meta-llama/llama-3.2-3b-instruct:free",
 ]
 
@@ -78,47 +78,65 @@ def call_llm(agent_id: str, user_message: str, max_tokens: int = 2048) -> str:
     models_to_try = [primary_model] + [m for m in FALLBACK_FREE_MODELS if m != primary_model]
 
     import time
+    
+    # [ESTRATEGIA SMART FALLBACK RAPIDO PARA API GRATUITA]
+    for model in models_to_try:
+        payload = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user",   "content": user_message},
+            ],
+            "max_tokens":  max_tokens,
+            "temperature": 0.3,
+        }
+        headers = {
+            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "Content-Type":  "application/json",
+            "HTTP-Referer":  "https://github.com/MaykNLD/mayk-orchestrators",
+            "X-Title":       "mayk.dev Orchestrator",
+        }
+        req = urllib.request.Request(
+            OPENROUTER_URL,
+            data=json.dumps(payload).encode(),
+            headers=headers,
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                data = json.loads(resp.read().decode())
+                content = data["choices"][0]["message"]["content"]
+                print(f"[llm_client] Exito con modelo: {model}")
+                return content
+        except urllib.error.HTTPError as e:
+            body = e.read().decode()
+            if e.code == 429 or e.code == 404 or e.code == 528:
+                print(f"[llm_client] {e.code} Saturado u offline en {model}. Saltando al siguiente...")
+                time.sleep(1) # Pequeña pausa para no enojar al rate-limit global de la cuenta
+                continue
+            print(f"[llm_client] Error critico {e.code} en {model}: {body[:200]}")
+            continue
+        except Exception as e:
+            print(f"[llm_client] Excepcion en {model}: {str(e)}")
+            continue
+
+    # ----------------------------------------------------
+    # ESTRATEGIA ORIGINAL (RETOQUES EXPONENCIALES PARA IAS DE PAGO)
+    # Dejo esto comentado para activarlo cuando pasemos a tiers premium
+    # ----------------------------------------------------
+    '''
     for model in models_to_try:
         wait_seconds = [10, 20, 40]
         for attempt in range(3):
-            payload = {
-                "model": model,
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user",   "content": user_message},
-                ],
-                "max_tokens":  max_tokens,
-                "temperature": 0.3,
-            }
-            headers = {
-                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                "Content-Type":  "application/json",
-                "HTTP-Referer":  "https://github.com/MaykNLD/mayk-orchestrators",
-                "X-Title":       "mayk.dev Orchestrator",
-            }
-            req = urllib.request.Request(
-                OPENROUTER_URL,
-                data=json.dumps(payload).encode(),
-                headers=headers,
-                method="POST",
-            )
+            # ...payload setup...
             try:
-                with urllib.request.urlopen(req, timeout=timeout) as resp:
-                    data = json.loads(resp.read().decode())
-                    content = data["choices"][0]["message"]["content"]
-                    print(f"[llm_client] Exito con modelo: {model}")
-                    return content
+                # ...request limit...
             except urllib.error.HTTPError as e:
-                body = e.read().decode()
                 if e.code == 429:
                     wait = wait_seconds[attempt] if attempt < len(wait_seconds) else 40
-                    print(f"[llm_client] 429 rate-limit en {model} (intento {attempt+1}). Reintentando en {wait}s...")
                     time.sleep(wait)
                     continue
-                print(f"[llm_client] Error {e.code} en {model}: {body[:200]}")
-                break  # Error no recuperable con este modelo, pasar al siguiente
-            except Exception as e:
-                print(f"[llm_client] Excepcion en {model}: {str(e)}")
                 break
+    '''
 
     return "ERROR LLM: todos los modelos gratuitos estan saturados o no disponibles. Intenta en unos minutos."

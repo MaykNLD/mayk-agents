@@ -21,6 +21,7 @@ class SastreRequest(BaseModel):
     analisis_evaluador_json: dict = {}
     idioma:                  str = "ES"
     mercado_geografico:      str = "ES"
+    forzar:                  bool = False
 
 class SastreResponse(BaseModel):
     agent_id:           str
@@ -40,7 +41,7 @@ def execute(req: SastreRequest):
         raise HTTPException(status_code=400, detail="analisis_evaluador_json es obligatorio.")
 
     fit_score = float(req.analisis_evaluador_json.get("fit_score", 0.0))
-    if fit_score < 3.0:
+    if fit_score < 3.0 and not req.forzar:
         raise HTTPException(
             status_code=422,
             detail=f"fit_score {fit_score} < 3.0 (grado D/F). El Sastre no procesa ofertas de baja compatibilidad."
