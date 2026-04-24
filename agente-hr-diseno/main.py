@@ -162,7 +162,7 @@ def _upload_pdf_to_supabase(pdf_bytes: bytes, perfil_id: str) -> Optional[str]:
 
     ts       = int(time.time())
     filename = f"{perfil_id}/{ts}_cv.pdf"
-    upload_url = f"{SUPABASE_URL}/storage/v1/object/cv-pdfs/{filename}"
+    upload_url = f"{SUPABASE_URL}/storage/v1/object/cvs-pdf/{filename}"
 
     headers = {
         "Authorization": f"Bearer {SUPABASE_KEY}",
@@ -178,7 +178,7 @@ def _upload_pdf_to_supabase(pdf_bytes: bytes, perfil_id: str) -> Optional[str]:
         return None
 
     # Generar URL firmada (86400 segundos = 24h)
-    sign_url = f"{SUPABASE_URL}/storage/v1/object/sign/cv-pdfs/{filename}"
+    sign_url = f"{SUPABASE_URL}/storage/v1/object/sign/cvs-pdf/{filename}"
     body     = json.dumps({"expiresIn": 86400}).encode()
     headers2 = {
         "Authorization": f"Bearer {SUPABASE_KEY}",
