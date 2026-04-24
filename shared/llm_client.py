@@ -12,18 +12,24 @@ from pathlib import Path
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OPENROUTER_URL     = "https://openrouter.ai/api/v1/chat/completions"
 
-# Mapa de modelos Premium por agente (100% de fiabilidad JSON)
+# Modelos económicos asignados por rol (OpenRouter)
+# gemini-2.0-flash:        $0.10/M — análisis largo, contexto masivo
+# deepseek-chat:           $0.14/M — reescritura precisa, JSON fiable
+# llama-3.3-70b-instruct:  $0.05/M — tareas estructuradas ligeras
+# mistral-small-3.1-24b:   $0.10/M — fallback general
 MODEL_MAP = {
-    "agente-auditor":      "anthropic/claude-3-5-haiku",
-    "agente-estratega":    "anthropic/claude-3-5-haiku",
-    "agente-visual":       "anthropic/claude-3-5-haiku",
-    "agente-dev":          "anthropic/claude-3-5-haiku",
-    "agente-qa-ops":       "anthropic/claude-3-5-haiku",
-    "agente-hr-rrhh":      "anthropic/claude-3-5-haiku",
-    "agente-hr-evaluador": "anthropic/claude-3-5-haiku",
-    "agente-hr-sastre":    "anthropic/claude-3-5-haiku",
-    "agente-hr-diseno":    "anthropic/claude-3-5-haiku",
-    "agente-scanner":      "anthropic/claude-3-5-haiku",
+    # ── Agentes Career-Ops ──────────────────────────────────────────
+    "agente-hr-evaluador": "google/gemini-2.0-flash-001",          # análisis JD largo + perfil
+    "agente-hr-sastre":    "deepseek/deepseek-chat",                # reescritura ATS precisa
+    "agente-hr-rrhh":      "deepseek/deepseek-chat",                # mejora y análisis de CV
+    "agente-hr-diseno":    "google/gemini-2.0-flash-001",           # generación HTML premium
+    "agente-scanner":      "google/gemini-2.0-flash-001",           # clasificación ofertas
+    # ── Agentes generales ───────────────────────────────────────────
+    "agente-auditor":      "mistralai/mistral-small-3.1-24b-instruct",
+    "agente-estratega":    "mistralai/mistral-small-3.1-24b-instruct",
+    "agente-visual":       "mistralai/mistral-small-3.1-24b-instruct",
+    "agente-dev":          "mistralai/mistral-small-3.1-24b-instruct",
+    "agente-qa-ops":       "mistralai/mistral-small-3.1-24b-instruct",
 }
 
 DEFAULT_TIMEOUT = 120

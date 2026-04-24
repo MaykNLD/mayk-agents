@@ -1,0 +1,41 @@
+id: agente-scanner
+name: "Agente Scanner de Ofertas"
+version: "1.0.0"
+category: career
+
+recommended_model:
+  primary: "google/gemini-2.0-flash-001"
+  fallback: "mistralai/mistral-small-3.1-24b-instruct"
+  reason: >
+    No requiere LLM para la busqueda — opera con logica determinista.
+    Si en el futuro se añade clasificacion automatica de ofertas por texto,
+    Gemini 2.0 Flash es la opcion mas economica y rapida disponible.
+
+compatible_orchestrators:
+  - career
+
+activation_criteria: >
+  Activado manualmente desde el dashboard o el CLI para buscar nuevas ofertas.
+  Recibe un perfil_id para contextualizar la búsqueda (nivel, mercado, idioma).
+  Corre en background para no bloquear la respuesta HTTP.
+
+inputs:
+  - perfil_id   # UUID del perfil en Supabase (para extraer nivel y mercado)
+  - limit       # Cantidad máxima de ofertas a procesar (default: 10)
+  - market      # "es" | "latam" | "remote" (default: remote)
+
+outputs:
+  - status             # "ok" | "error"
+  - mensaje            # Descripción del resultado
+  - ofertas_encontradas # Total de ofertas obtenidas de las APIs
+  - ofertas_nuevas     # Ofertas no duplicadas insertadas en Supabase
+
+endpoint: /scan
+port: 8015
+
+tags:
+  - career
+  - scanner
+  - ofertas
+  - remotive
+  - automatizacion

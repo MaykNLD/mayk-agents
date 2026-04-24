@@ -1,0 +1,47 @@
+id: agente-hr-diseno
+name: "Agente HR Diseño de CV"
+version: "1.0.0"
+category: career
+
+recommended_model:
+  primary: "google/gemini-2.0-flash-001"
+  fallback: "mistralai/mistral-small-3.1-24b-instruct"
+  reason: >
+    Genera HTML premium a partir del CV mejorado del candidato.
+    Gemini 2.0 Flash ofrece excelente rendimiento a bajo coste con ventana
+    de contexto amplia para manejar CVs extensos y plantillas HTML complejas.
+
+compatible_orchestrators:
+  - career
+
+activation_criteria: >
+  Activado desde el dashboard cuando el usuario solicita generar su CV en PDF.
+  Recibe el perfil_id y opcionalmente la versión de CV a usar.
+  También invocable directamente desde el CLI o el orquestador career.
+
+inputs:
+  - perfil_id        # UUID del perfil en Supabase
+  - cv_version_id    # (opcional) ID de versión específica; si None usa la última aprobada
+  - foto_modo        # "sin_foto" | "placeholder" | "con_foto" (default: sin_foto)
+  - foto_url         # (opcional) URL pública de la foto del candidato
+  - idioma           # "ES" | "EN" (default: ES)
+
+outputs:
+  - perfil_id           # UUID del perfil procesado
+  - version_id          # ID de la versión de CV usada
+  - html_cv             # HTML premium generado (ATS-bypass, print-to-PDF)
+  - pdf_url             # URL firmada (24h) del PDF en Supabase Storage (bucket cvs-pdf)
+  - secciones_detectadas # array: secciones HTML generadas
+  - advertencias        # array: warnings del proceso (WeasyPrint, Storage, etc.)
+
+endpoint: /generar-cv-html
+port: 8014
+
+prompt_file: prompt.md
+tags:
+  - career
+  - diseno
+  - cv
+  - html
+  - pdf
+  - ats
