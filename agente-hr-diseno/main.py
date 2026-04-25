@@ -106,14 +106,24 @@ Responde EXCLUSIVAMENTE con el JSON definido en tu prompt. Sin texto fuera del J
         )
 
     html_cv = resultado.get("html_cv", "")
+    if not html_cv or not html_cv.strip():
+        raise HTTPException(
+            status_code=500,
+            detail="El LLM devolvio un html_cv vacio. Respuesta truncada o invalida."
+        )
 
-    # Intentar generar PDF con WeasyPrint (opcional, no falla si no está instalado)
+    # Generar PDF con WeasyPrint (obligatorio para la descarga premium)
     pdf_url = None
     try:
         from weasyprint import HTML as WP_HTML
         pdf_bytes = WP_HTML(string=html_cv).write_pdf()
+        if not pdf_bytes:
+            raise RuntimeError("WeasyPrint genero 0 bytes de PDF")
+        print(f"[agente-hr-diseno] PDF generado OK: {len(pdf_bytes)} bytes")
         pdf_url = _upload_pdf_to_supabase(pdf_bytes, req.perfil_id)
-
+        if not pdf_url:
+            raise RuntimeError("La subida a Supabase Storage devolvio URL vacia")
+        print(f"[agente-hr-diseno] PDF subido OK: {pdf_url[:80]}")
         # Actualizar version en Supabase con la URL del PDF y el HTML
         if version_id:
             from supabase_career import _patch
@@ -123,17 +133,23 @@ Responde EXCLUSIVAMENTE con el JSON definido en tu prompt. Sin texto fuera del J
                 "aprobado": True,
             })
     except ImportError:
-        print("[agente-hr-diseno] WeasyPrint no instalado — solo se devuelve HTML")
+        raise HTTPException(
+            status_code=503,
+            detail="WeasyPrint no esta instalado en el contenedor. Revisa el Dockerfile."
+        )
     except Exception as e:
-        print(f"[agente-hr-diseno] Error generando PDF: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error generando/subiendo PDF: {str(e)}"
+        )
 
     return GenerarCVResponse(
         perfil_id           = req.perfil_id,
         version_id          = version_id,
         html_cv             = html_cv,
         pdf_url             = pdf_url,
-        secciones_detectadas= resultado.get("secciones_detectadas", []),
-        advertencias        = resultado.get("advertencias", []),
+        secciones_detectadas= resultado.get("secciones_detectadas") or [],
+        advertencias        = resultado.get("advertencias") or [],
     )
 
 
@@ -156,9 +172,11 @@ def _parse_llm_json(raw: str) -> Optional[dict]:
 
 
 def _upload_pdf_to_supabase(pdf_bytes: bytes, perfil_id: str) -> Optional[str]:
-    """Sube el PDF a Supabase Storage y devuelve URL firmada (24h)."""
+    """Sube el PDF a Supabase Storage y devuelve URL firmada (24h).
+    Lanza excepcion si falla — no devuelve None silenciosamente.
+    """
     if not SUPABASE_URL or not SUPABASE_KEY:
-        return None
+        raise RuntimeError("SUPABASE_URL o SUPABASE_KEY no configuradas en el entorno")
 
     ts       = int(time.time())
     filename = f"{perfil_id}/{ts}_cv.pdf"
@@ -172,26 +190,32 @@ def _upload_pdf_to_supabase(pdf_bytes: bytes, perfil_id: str) -> Optional[str]:
     req = urllib.request.Request(upload_url, data=pdf_bytes, headers=headers, method="POST")
     try:
         with urllib.request.urlopen(req, timeout=30) as r:
-            pass  # Upload OK
+            status = r.status
+            if status not in (200, 201):
+                raise RuntimeError(f"Storage upload devolvio HTTP {status}")
+    except urllib.error.HTTPError as e:
+        body = e.read().decode(errors="ignore")[:300]
+        raise RuntimeError(f"Storage upload HTTP {e.code}: {body}")
     except Exception as e:
-        print(f"[agente-hr-diseno] Error subiendo PDF: {e}")
-        return None
+        raise RuntimeError(f"Storage upload error: {e}")
 
     # Generar URL firmada (86400 segundos = 24h)
     sign_url = f"{SUPABASE_URL}/storage/v1/object/sign/cvs-pdf/{filename}"
-    body     = json.dumps({"expiresIn": 86400}).encode()
+    body_bytes = json.dumps({"expiresIn": 86400}).encode()
     headers2 = {
         "Authorization": f"Bearer {SUPABASE_KEY}",
         "Content-Type":  "application/json",
     }
-    req2 = urllib.request.Request(sign_url, data=body, headers=headers2, method="POST")
+    req2 = urllib.request.Request(sign_url, data=body_bytes, headers=headers2, method="POST")
     try:
         with urllib.request.urlopen(req2, timeout=10) as r:
             data = json.loads(r.read().decode())
             signed_path = data.get("signedURL", "")
-            if signed_path:
-                return f"{SUPABASE_URL}/storage/v1{signed_path}"
+            if not signed_path:
+                raise RuntimeError(f"signedURL vacio en la respuesta: {data}")
+            return f"{SUPABASE_URL}/storage/v1{signed_path}"
+    except urllib.error.HTTPError as e:
+        body = e.read().decode(errors="ignore")[:300]
+        raise RuntimeError(f"Storage sign HTTP {e.code}: {body}")
     except Exception as e:
-        print(f"[agente-hr-diseno] Error generando URL firmada: {e}")
-
-    return None
+        raise RuntimeError(f"Storage sign error: {e}")
