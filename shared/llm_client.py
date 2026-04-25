@@ -12,19 +12,18 @@ from pathlib import Path
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 OPENROUTER_URL     = "https://openrouter.ai/api/v1/chat/completions"
 
-# Modelos económicos asignados por rol (OpenRouter)
-# gemini-2.0-flash:        $0.10/M — análisis largo, contexto masivo
-# deepseek-chat:           $0.14/M — reescritura precisa, JSON fiable
-# llama-3.3-70b-instruct:  $0.05/M — tareas estructuradas ligeras
+# Modelos asignados por rol (OpenRouter)
+# gemini-2.0-flash-001:    $0.10/M — análisis largo, contexto masivo
+# claude-3-5-haiku:         $0.25/M in / $1.25/M out — instrucciones precisas, JSON fiable, rápido
 # mistral-small-3.1-24b:   $0.10/M — fallback general
 MODEL_MAP = {
-    # ── Agentes Career-Ops ──────────────────────────────────────────
+    # ── Agentes Career-Ops ────────────────────────────────────────────────
     "agente-hr-evaluador": "google/gemini-2.0-flash-001",          # análisis JD largo + perfil
-    "agente-hr-sastre":    "deepseek/deepseek-chat",                # reescritura ATS precisa
-    "agente-hr-rrhh":      "deepseek/deepseek-chat",                # mejora y análisis de CV
+    "agente-hr-sastre":    "anthropic/claude-3-5-haiku",            # reescritura ATS precisa y rápida
+    "agente-hr-rrhh":      "anthropic/claude-3-5-haiku",            # mejora y análisis de CV
     "agente-hr-diseno":    "google/gemini-2.0-flash-001",           # generación HTML premium
     "agente-scanner":      "google/gemini-2.0-flash-001",           # clasificación ofertas
-    # ── Agentes generales ───────────────────────────────────────────
+    # ── Agentes generales ───────────────────────────────────────────────
     "agente-auditor":      "mistralai/mistral-small-3.1-24b-instruct",
     "agente-estratega":    "mistralai/mistral-small-3.1-24b-instruct",
     "agente-visual":       "mistralai/mistral-small-3.1-24b-instruct",
