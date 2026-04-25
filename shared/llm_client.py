@@ -18,7 +18,7 @@ OPENROUTER_URL     = "https://openrouter.ai/api/v1/chat/completions"
 # mistral-small-3.1-24b:   $0.10/M — fallback general
 MODEL_MAP = {
     # ── Agentes Career-Ops ────────────────────────────────────────────────
-    "agente-hr-evaluador": "google/gemini-2.0-flash-001",          # análisis JD largo + perfil
+    "agente-hr-evaluador": "anthropic/claude-3-5-haiku",            # FIX: Gemini estaba fallando con el JSON (score 0)
     "agente-hr-sastre":    "anthropic/claude-3-5-haiku",            # reescritura ATS precisa y rápida
     "agente-hr-rrhh":      "anthropic/claude-3-5-haiku",            # mejora y análisis de CV
     "agente-hr-diseno":    "google/gemini-2.0-flash-001",           # generación HTML premium
