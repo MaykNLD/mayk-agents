@@ -68,30 +68,39 @@ Escribe un parrafo de presentacion de 3-4 lineas adaptado a esta oferta especifi
     "experiencia": [
       {
         "empresa": "string",
-        "rol": "string",
-        "periodo": "MM/YYYY - MM/YYYY",
-        "descripcion_adaptada": "string con logros cuantificados y keywords",
-        "logros": ["logro 1", "logro 2"]
+        "puesto": "string",
+        "fecha_inicio": "MM/YYYY",
+        "fecha_fin": "MM/YYYY o Actualidad",
+        "descripcion": "string con responsabilidades, logros cuantificados y keywords"
       }
     ],
     "proyectos": [
       {
         "nombre": "string",
-        "descripcion_adaptada": "string",
+        "descripcion": "string",
         "tecnologias": ["tech1", "tech2"],
-        "url": "string o null"
+        "url": "string o null",
+        "fecha": "YYYY"
       }
     ],
-    "skills": {
-      "principales": ["skill1", "skill2"],
-      "secundarias": ["skill3", "skill4"],
-      "idiomas": ["Español (nativo)", "Inglés (B2)"]
+    "habilidades": ["skill1", "skill2", "skill3"],
+    "stack_tecnico": {
+      "backend": ["tech1"],
+      "frontend": ["tech2"],
+      "datos": ["tech3"],
+      "infra": ["tech4"],
+      "ia_llm": ["tech5"],
+      "otros": ["tech6"]
     },
+    "idiomas": [
+      { "idioma": "Español", "nivel": "Nativo" },
+      { "idioma": "Inglés", "nivel": "B2" }
+    ],
     "educacion": [
       {
         "titulo": "string",
         "institucion": "string",
-        "año": "YYYY"
+        "fecha": "YYYY"
       }
     ]
   },
