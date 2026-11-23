@@ -61,15 +61,15 @@ def execute(req: EvaluadorRequest):
         clean = raw.strip()
         # Eliminar bloques <think>...</think> que emiten modelos como Nemotron/R1
         clean = _re.sub(r"<think>.*?</think>", "", clean, flags=_re.DOTALL).strip()
-        # Eliminar bloques de codigo markdown
-        if clean.startswith("```"):
-            lines = clean.split("\n")
-            # Saltar la primera línea (```json) y la última (```)
-            clean = "\n".join(lines[1:-1] if lines[-1].strip() == "```" else lines[1:])
-        # Extraer primer bloque JSON si hay texto extra alrededor
-        match = _re.search(r"\{.*\}", clean, _re.DOTALL)
-        if match:
-            clean = match.group(0)
+        # Eliminar bloques de codigo markdown (```json ... ``` o ``` ... ```)
+        # Usamos rfind/find para ser robustos ante espacios, saltos y variantes
+        clean = _re.sub(r"^```[a-zA-Z]*\n?", "", clean).strip()
+        clean = _re.sub(r"\n?```\s*$", "", clean).strip()
+        # Extraer JSON: desde el primer { hasta el último } (más robusto que regex DOTALL)
+        start = clean.find("{")
+        end   = clean.rfind("}")
+        if start != -1 and end != -1 and end > start:
+            clean = clean[start:end + 1]
         data = json.loads(clean)
 
         # Normalizar fit_score: algunos modelos devuelven match_score, score o puntuacion (0-100)
