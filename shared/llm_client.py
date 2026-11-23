@@ -14,13 +14,13 @@ OPENROUTER_URL     = "https://openrouter.ai/api/v1/chat/completions"
 
 # Modelos asignados por rol (OpenRouter)
 # gemini-2.0-flash-001:    $0.10/M — análisis largo, contexto masivo
-# claude-3-5-haiku:         $0.25/M in / $1.25/M out — instrucciones precisas, JSON fiable, rápido
+# claude-haiku-4.5:          $1.00/M in / $5.00/M out — instrucciones precisas, JSON fiable, rápido
 # mistral-small-3.1-24b:   $0.10/M — fallback general
 MODEL_MAP = {
     # ── Agentes Career-Ops ────────────────────────────────────────────────
-    "agente-hr-evaluador": "anthropic/claude-3-5-haiku",            # FIX: Gemini estaba fallando con el JSON (score 0)
-    "agente-hr-sastre":    "anthropic/claude-3-5-haiku",            # reescritura ATS precisa y rápida
-    "agente-hr-rrhh":      "anthropic/claude-3-5-haiku",            # mejora y análisis de CV
+    "agente-hr-evaluador": "anthropic/claude-haiku-4.5",            # FIX: Gemini estaba fallando con el JSON (score 0)
+    "agente-hr-sastre":    "anthropic/claude-haiku-4.5",            # reescritura ATS precisa y rápida
+    "agente-hr-rrhh":      "anthropic/claude-haiku-4.5",            # mejora y análisis de CV
     "agente-hr-diseno":    "google/gemini-2.0-flash-001",           # generación HTML premium
     "agente-scanner":      "google/gemini-2.0-flash-001",           # clasificación ofertas
     # ── Agentes generales ───────────────────────────────────────────────
@@ -55,7 +55,7 @@ def call_llm(agent_id: str, user_message: str, max_tokens: int = 4096) -> str:
         return "ERROR: OPENROUTER_API_KEY no configurada en el entorno."
 
     system_prompt = load_prompt(agent_id)
-    model = MODEL_MAP.get(agent_id, "anthropic/claude-3-5-haiku")
+    model = MODEL_MAP.get(agent_id, "anthropic/claude-haiku-4.5")
     timeout = DEFAULT_TIMEOUT
 
     payload = {
