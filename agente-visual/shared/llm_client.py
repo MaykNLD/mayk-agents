@@ -14,16 +14,16 @@ OPENROUTER_URL     = "https://openrouter.ai/api/v1/chat/completions"
 
 # Mapa de modelos Premium por agente (100% de fiabilidad JSON)
 MODEL_MAP = {
-    "agente-auditor":      "anthropic/claude-3-5-haiku",
-    "agente-estratega":    "anthropic/claude-3-5-haiku",
-    "agente-visual":       "anthropic/claude-3-5-haiku",
-    "agente-dev":          "anthropic/claude-3-5-haiku",
-    "agente-qa-ops":       "anthropic/claude-3-5-haiku",
-    "agente-hr-rrhh":      "anthropic/claude-3-5-haiku",
-    "agente-hr-evaluador": "anthropic/claude-3-5-haiku",
-    "agente-hr-sastre":    "anthropic/claude-3-5-haiku",
-    "agente-hr-diseno":    "anthropic/claude-3-5-haiku",
-    "agente-scanner":      "anthropic/claude-3-5-haiku",
+    "agente-auditor":      "anthropic/claude-haiku-4.5",
+    "agente-estratega":    "anthropic/claude-haiku-4.5",
+    "agente-visual":       "anthropic/claude-haiku-4.5",
+    "agente-dev":          "anthropic/claude-haiku-4.5",
+    "agente-qa-ops":       "anthropic/claude-haiku-4.5",
+    "agente-hr-rrhh":      "anthropic/claude-haiku-4.5",
+    "agente-hr-evaluador": "anthropic/claude-haiku-4.5",
+    "agente-hr-sastre":    "anthropic/claude-haiku-4.5",
+    "agente-hr-diseno":    "anthropic/claude-haiku-4.5",
+    "agente-scanner":      "anthropic/claude-haiku-4.5",
 }
 
 DEFAULT_TIMEOUT = 120
@@ -50,7 +50,7 @@ def call_llm(agent_id: str, user_message: str, max_tokens: int = 4096) -> str:
         return "ERROR: OPENROUTER_API_KEY no configurada en el entorno."
 
     system_prompt = load_prompt(agent_id)
-    model = MODEL_MAP.get(agent_id, "anthropic/claude-3-5-haiku")
+    model = MODEL_MAP.get(agent_id, "anthropic/claude-haiku-4.5")
     timeout = DEFAULT_TIMEOUT
 
     payload = {
